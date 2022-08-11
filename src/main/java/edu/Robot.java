@@ -1,3 +1,5 @@
+package edu;
+
 public class Robot {
 
     public void sayHello(long sleepTime) throws InterruptedException {

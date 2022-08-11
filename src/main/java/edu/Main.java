@@ -1,4 +1,6 @@
-import metrics.MetricService;
+package edu;
+
+import edu.metrics.MetricService;
 
 public class Main {
 

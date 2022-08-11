@@ -1,17 +1,20 @@
-package aspects;
+package edu.aspects;
 
 import com.codahale.metrics.Timer;
-import metrics.MetricService;
+import edu.metrics.MetricService;
+
+import static com.codahale.metrics.MetricRegistry.name;
 
 public aspect MyAspect {
 
-    pointcut logAllMethod(): execution(* Robot.*(..));
+    pointcut logAllMethod(): execution(* edu.Robot.*(..));
 
     Object around(): logAllMethod() {
         Timer.Context context = null;
         try {
             System.out.println("Aspect...Before method " + thisJoinPoint.getSignature());
-            context = MetricService.getTimer(thisJoinPoint.getSignature().toString()).time();
+            String timerName = name(thisJoinPoint.getSignature().getDeclaringType().getSimpleName(), thisJoinPoint.getSignature().getName());
+            context = MetricService.getTimer(timerName).time();
 
             return proceed();
         } finally {

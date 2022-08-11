@@ -1,9 +1,11 @@
-package metrics;
+package edu.metrics;
+
 
 import com.codahale.metrics.*;
 
+import java.util.HashSet;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class MetricService {
@@ -21,9 +23,23 @@ public class MetricService {
     private static void initReporters() {
         registry = SharedMetricRegistries.getOrCreate(METRIC_NAME);
 
+        Set<MetricAttribute> disableMetric = new HashSet<>();
+        disableMetric.add(MetricAttribute.MEAN_RATE);
+        disableMetric.add(MetricAttribute.M1_RATE);
+        disableMetric.add(MetricAttribute.M5_RATE);
+        disableMetric.add(MetricAttribute.M15_RATE);
+        disableMetric.add(MetricAttribute.STDDEV);
+        disableMetric.add(MetricAttribute.P50);
+        disableMetric.add(MetricAttribute.P75);
+        disableMetric.add(MetricAttribute.P95);
+        disableMetric.add(MetricAttribute.P98);
+        disableMetric.add(MetricAttribute.P99);
+        disableMetric.add(MetricAttribute.P999);
+
         consoleReporter = ConsoleReporter.forRegistry(registry)
                 .convertRatesTo(TimeUnit.SECONDS)
                 .convertDurationsTo(TimeUnit.MILLISECONDS)
+                .disabledMetricAttributes(disableMetric)
                 .build();
     }
 
